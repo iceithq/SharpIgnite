@@ -71,6 +71,7 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.118.0\lib\net45\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
@@ -78,14 +79,32 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppContext.cs" />
+    <Compile Include="Array.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="Database.cs" />
+    <Compile Include="FormHelper.cs" />
+    <Compile Include="HtmlHelper.cs" />
+    <Compile Include="Input.cs" />
     <Compile Include="MySqlDatabaseDriver.cs" />
+    <Compile Include="NumberHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLiteDatabaseDriver.cs" />
+    <Compile Include="UrlHelper.cs" />
+    <Compile Include="WebForm.aspx.cs">
+      <DependentUpon>WebForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm.aspx.designer.cs">
+      <DependentUpon>WebForm.aspx.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WebForm.aspx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
