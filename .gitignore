@@ -4,3 +4,4 @@ bin/
 packages/
 *.nupkg
 .cr/
+coverage.xml
