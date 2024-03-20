@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.SQLite;
 using System.IO;
 using System.Reflection;
-using MySql.Data.MySqlClient;
+using SharpIgnite;
 
 namespace SharpIgnite
 {
-    public class MySqlDatabaseDriver : IDatabaseDriver
+    public abstract class AbstractDatabaseDriver : IDatabaseDriver
     {
         public string ConnectionString { get; set; }
         public Database Database { get; set; }
@@ -20,15 +21,7 @@ namespace SharpIgnite
             set { queryBuilder = value; }
         }
         
-        public MySqlDatabaseDriver() : this("")
-        {
-        }
-        
-        public MySqlDatabaseDriver(string connectionString) : this(connectionString, new MySqlQueryBuilder())
-        {
-        }
-        
-        public MySqlDatabaseDriver(string connectionString, ISqlQueryBuilder queryBuilder)
+        public AbstractDatabaseDriver(string connectionString, ISqlQueryBuilder queryBuilder)
         {
             this.ConnectionString = connectionString;
             this.QueryBuilder = queryBuilder;
@@ -110,7 +103,13 @@ namespace SharpIgnite
                                 property.SetValue(item, Activator.CreateInstance(property.PropertyType));
                             }
                         } else {
-                            property.SetValue(item, value);
+                            if (property.PropertyType == typeof(int) && value.GetType() == typeof(Int64)) {
+                                // Convert Int64 to int
+                                // HACK: For default int in SQLite that's Int64
+                                property.SetValue(item, Convert.ToInt32((Int64)value));
+                            } else {
+                                property.SetValue(item, value);
+                            }
                         }
                     }
                 } catch (IndexOutOfRangeException ex) {}
@@ -158,11 +157,10 @@ namespace SharpIgnite
             return ExecuteNonQuery(query);
         }
         
-        MySqlDataReader ExecuteReader(string query)
+        IDataReader ExecuteReader(string query)
         {
-            var connection = new MySqlConnection(ConnectionString);
+            var connection = CreateConnection(ConnectionString);
             OpenConnection(connection);
-            //var cmd = new SqlCommand(query, connection);
             var cmd = connection.CreateCommand();
             cmd.CommandText = query;
             var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
@@ -176,7 +174,7 @@ namespace SharpIgnite
         
         T ExecuteScalar<T>(string query, T defaultValue)
         {
-            var connection = new MySqlConnection(ConnectionString);
+            var connection = CreateConnection(ConnectionString);
             OpenConnection(connection);
             var cmd = connection.CreateCommand();
             cmd.CommandText = query;
@@ -191,7 +189,7 @@ namespace SharpIgnite
         
         int ExecuteNonQuery(string query)
         {
-            var connection = new MySqlConnection(ConnectionString);
+            var connection = CreateConnection(ConnectionString);
             OpenConnection(connection);
             //var cmd = new SqlCommand(query, connection);
             var cmd = connection.CreateCommand();
@@ -201,23 +199,41 @@ namespace SharpIgnite
             return rowsAffected;
         }
         
-        void OpenConnection(MySqlConnection connection)
+        void OpenConnection(IDbConnection connection)
         {
             if (connection.State == ConnectionState.Closed) {
                 connection.Open();
             }
         }
         
-        void CloseConnection(MySqlConnection connection)
+        void CloseConnection(IDbConnection connection)
         {
             if (connection.State == ConnectionState.Open) {
                 connection.Close();
                 connection.Dispose();
             }
         }
+        
+        protected abstract IDbConnection CreateConnection(string connectionString);
+    }
+    
+    public class SQLiteDatabaseDriver : AbstractDatabaseDriver
+    {
+        public SQLiteDatabaseDriver(string connectionString) : this(connectionString, new SQLiteQueryBuilder())
+        {
+        }
+        
+        public SQLiteDatabaseDriver(string connectionString, ISqlQueryBuilder queryBuilder) : base(connectionString, queryBuilder)
+        {
+        }
+        
+        protected override IDbConnection CreateConnection(string connectionString)
+        {
+            return new SQLiteConnection(connectionString);
+        }
     }
 
-    public class MySqlQueryBuilder : ISqlQueryBuilder
+    public class SQLiteQueryBuilder : ISqlQueryBuilder
     {
         public string Insert(Database database, string tableName, Dictionary<string, object> data)
         {
@@ -243,7 +259,7 @@ namespace SharpIgnite
             }
             string query = "INSERT INTO " + database.tableName + "(" + columns + ")" + endl() +
                 "VALUES(" + values + ");" + endl() +
-                "SELECT LAST_INSERT_ID();";
+                "SELECT LAST_INSERT_ROWID();";
             database.LastQuery = query;
             return query;
         }
@@ -288,10 +304,10 @@ namespace SharpIgnite
             }
             string primaryKeyColumn = string.IsNullOrEmpty(primaryKeyColumnName)
                 ? ""
-                : "OUTPUT INSERTED." + primaryKeyColumnName + endl();
+                : "SELECT LAST_INSERT_ROWID();" + endl();
             string query = "INSERT INTO " + tableName + "(" + columns + ")" + endl() +
-                primaryKeyColumn +
-                "VALUES(" + values  + ")" + endl();
+                "VALUES(" + values  + ");" + endl() +
+                primaryKeyColumn;
             return query;
         }
         
