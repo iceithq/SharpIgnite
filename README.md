@@ -1,6 +1,6 @@
 # SharpIgnite
 
-SharpIgnite is a lightweight and simple application framework inspired by CodeIgniter, designed to make it easy to build web applications in C#.
+SharpIgnite is a lightweight and simple application framework inspired by CodeIgniter, designed to make it easy to build applications in C#.
 
 ## Features
 
