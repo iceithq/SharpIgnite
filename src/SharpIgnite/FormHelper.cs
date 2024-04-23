@@ -20,7 +20,7 @@ namespace SharpIgnite
 
         public static string Input(string name, string value, string extra)
         {
-            return string.Format("<input type='text' name='{0}' id='{0}' value='{1}' {2}/>", name, value, extra);
+            return string.Format("<input type='text' name='{0}' value='{1}' {2}/>", name, value, extra);
         }
 
         public static string Password(string name, string value)
@@ -30,7 +30,7 @@ namespace SharpIgnite
 
         public static string Password(string name, string value, string extra)
         {
-            return string.Format("<input type='password' name='{0}' id='{0}' value='{1}' {2}/>", name, value, extra);
+            return string.Format("<input type='password' name='{0}' value='{1}' {2}/>", name, value, extra);
         }
 
         public static string DropDown(string name, Array options, string selected, string extra)

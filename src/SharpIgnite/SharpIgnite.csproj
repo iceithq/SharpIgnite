@@ -81,15 +81,23 @@
   <ItemGroup>
     <Compile Include="AppContext.cs" />
     <Compile Include="Array.cs" />
+    <Compile Include="ColumnAttribute.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Database.cs" />
+    <Compile Include="DatabaseSeeder.cs" />
     <Compile Include="FormHelper.cs" />
     <Compile Include="HtmlHelper.cs" />
     <Compile Include="Input.cs" />
+    <Compile Include="Model.cs" />
     <Compile Include="MySqlDatabaseDriver.cs" />
+    <Compile Include="MySqlQueryBuilder.cs" />
     <Compile Include="NumberHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlDatabaseDriver.cs" />
     <Compile Include="SQLiteDatabaseDriver.cs" />
+    <Compile Include="SQLiteQueryBuilder.cs" />
+    <Compile Include="SqlQueryBuilder.cs" />
+    <Compile Include="StringHelper.cs" />
     <Compile Include="UrlHelper.cs" />
     <Compile Include="WebForm.aspx.cs">
       <DependentUpon>WebForm.aspx</DependentUpon>
