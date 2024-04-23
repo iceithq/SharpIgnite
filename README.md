@@ -30,6 +30,15 @@ For more detailed instructions on how to use SharpIgnite, please refer to the do
 
 We welcome contributions from the community to help improve SharpIgnite. If you encounter any bugs, issues, or have suggestions for new features, please submit a pull request or open an issue on the GitHub repository.
 
+## Publish
+
+We pack and push SharpIgnite via NuGet. Use the following commands:
+
+```
+> nuget pack SharpIgnite.csproj
+> nuget push SharpIgnite.0.2.2.nupkg -Source https://api.nuget.org/v3/index.json -ApiKey %NUGET_API_KEY%
+```
+
 ## License
 
 SharpIgnite is licensed under the MIT License. See the LICENSE file for details.
