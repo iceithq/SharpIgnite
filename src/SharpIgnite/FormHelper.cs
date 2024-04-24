@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace SharpIgnite
 {
@@ -43,12 +44,17 @@ namespace SharpIgnite
             return DropDown(name, options, "", "");
         }
 
+        static string Encode(string str)
+        {
+            return HttpUtility.HtmlEncode(str);
+        }
+
         public static string DropDown(string name, Array options, string selected, string extra)
         {
             string form = "<select name='" + name + "' " + extra + ">";
             foreach (var key in options.Keys) {
                 var value = options[key];
-                form += "<option value='" + key + "'>" + value + "</option>";
+                form += "<option value='" + Encode(key.ToString()) + "'>" + Encode(value.ToString()) + "</option>";
             }
             form += "</select>";
             return form;
