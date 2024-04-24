@@ -8,7 +8,7 @@
     <h3>Profile information</h3>
 
     <p>Username<br />
-        <%= FormHelper.Input("username") %>
+        <%= FormHelper.Input("username", Post("username")) %>
     </p>
     <p>Password<br />
         <%= FormHelper.Password("password") %>
