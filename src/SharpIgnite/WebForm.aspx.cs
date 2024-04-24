@@ -21,5 +21,15 @@ namespace SharpIgnite
         {
             Response.Write(s);
         }
+
+        public string Post(string key)
+        {
+            return Input.Post(key);
+        }
+
+        public string Get(string key)
+        {
+            return Input.Get(key);
+        }
     }
 }
