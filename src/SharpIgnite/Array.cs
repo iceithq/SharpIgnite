@@ -51,7 +51,16 @@ namespace SharpIgnite
         {
             return new Array(key, value);
         }
-        
+
+        public static Array Range(int from, int to)
+        {
+            var array = new Array();
+            for (int i = from; i <= to; i++) {
+                array.Add(i, i);
+            }
+            return array;
+        }
+
         public Array Add(object key, object value)
         {
             data.Add(key, value);
