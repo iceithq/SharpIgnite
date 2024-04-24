@@ -88,6 +88,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="DatabaseSeeder.cs" />
+    <Compile Include="DateHelper.cs" />
     <Compile Include="FormHelper.cs" />
     <Compile Include="HtmlHelper.cs" />
     <Compile Include="Input.cs" />
