@@ -23,6 +23,11 @@ namespace SharpIgnite
             return string.Format("<input type='text' name='{0}' value='{1}' {2}/>", name, value, extra);
         }
 
+        public static string Password(string name)
+        {
+            return Password(name, "");
+        }
+
         public static string Password(string name, string value)
         {
             return Password(name, value, "");
@@ -31,6 +36,11 @@ namespace SharpIgnite
         public static string Password(string name, string value, string extra)
         {
             return string.Format("<input type='password' name='{0}' value='{1}' {2}/>", name, value, extra);
+        }
+
+        public static string DropDown(string name, Array options)
+        {
+            return DropDown(name, options, "", "");
         }
 
         public static string DropDown(string name, Array options, string selected, string extra)
@@ -44,9 +54,36 @@ namespace SharpIgnite
             return form;
         }
 
+        public static string Label(string text, string id)
+        {
+            return string.Format("<label for='{1}'>{0}</label>", text, id);
+        }
+
+        public static string Radio(string name, string value, bool _checked, string extra)
+        {
+            var c = _checked ? "checked" : "";
+            return string.Format("<input type='radio' name='{0}' value='{1}' {2} {3}>", name, value, c, extra);
+        }
+
+        public static string CheckBox(string name, string value, bool _checked)
+        {
+            var c = _checked ? "selected" : "";
+            return string.Format("<input type='checkbox' name='{0}' value='{1}' {2}>", name, value, c);
+        }
+
+        public static string Email(string name)
+        {
+            return Email(name, "", "");
+        }
+
         public static string Email(string name, string value, string extra)
         {
-            return string.Format("<input type='email' name='{0}' value='{1}' {2}/>", name, value, extra);
+            return string.Format("<input type='email' name='{0}' value='{1}' {2}>", name, value, extra);
+        }
+
+        public static string Submit(string value, string extra)
+        {
+            return string.Format("<input type='submit' value='{0}' {1}>", value, extra);
         }
     }
 }
